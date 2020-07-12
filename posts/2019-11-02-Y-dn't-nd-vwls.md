@@ -1,6 +1,9 @@
 ---
 title: Yu dn't nd all the vwls
+tags: misc
 ---
+
+<img src="../images/silly.png" alt="man balancing birds on a pinocchio-like long nose" />
 
 As yu cn se frm my wbste dmn nme yu dn't nd all the vwls. 
 

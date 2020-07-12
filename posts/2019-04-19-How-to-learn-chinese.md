@@ -1,9 +1,13 @@
 ---
 title: How To Learn Chinese
+tags: chinese
 ---
 
-Learning Chinese is easier than most people think.
-I like Chinese because for me, compared to some other languages (French, German), it is quite logical.
+<img src="../images/great-wall.jpg" alt="great wall of china with foggy mountains in the back" />
+
+Learning Chinese has never been easier. It's still a long journey but it's not as hard as most people think.
+
+I like Chinese because for me, it is a little bit more on the consistent side than some other languages (French, German).
 You don't have to conjugate, you don't have special past or future tenses and characters are built up from basic parts called radicals (often times visually displaying their meaning).
 
 For me, the hardest parts about learning Chinese is writing the characters and voicing the tones correctly.
@@ -23,3 +27,4 @@ Many people skip learning the characters and learn just to speak which is a huge
 * [italki](https://www.italki.com/teachers/chinese?hl=en) - online tutors
 
 If you are also learning Chinese and have some great websites or apps, please let me know!
+

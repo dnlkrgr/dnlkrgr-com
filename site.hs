@@ -11,7 +11,7 @@ main =
             (defaultConfiguration
                 { deployCommand =
                     unwords
-                        [ "rsync -ave 'ssh' _site daniel@dnlkrgr.com:hakyll && "
+                        [ "rsync -cave 'ssh' _site daniel@dnlkrgr.com:hakyll && "
                         , "ssh -t dnlkrgr.com '"
                         , "sudo rm -rf /var/www/dnlkrgr.com/html &&"
                         , "sudo cp -r ~/hakyll/_site /var/www/dnlkrgr.com/html"
@@ -36,12 +36,28 @@ main =
                                                defaultContext
                       >>= relativizeUrls
 
+              tags <- buildTags "posts/*" (fromCapture "tags/*.html")
+
+              tagsRules tags $ \tag pattern -> do
+                  let title = "Posts tagged \"" ++ tag ++ "\""
+                  route idRoute
+                  compile $ do
+                      posts <- recentFirst =<< loadAll pattern
+                      let ctx = constField "title" title
+                                `mappend` listField "posts" (postCtxWithTags tags) (return posts)
+                                `mappend` defaultContext
+              
+                      makeItem ""
+                          >>= loadAndApplyTemplate "templates/tag.html" ctx
+                          >>= loadAndApplyTemplate "templates/default.html" ctx
+                          >>= relativizeUrls
+
               match "posts/*" $ do
                   route $ setExtension "html"
                   compile
                       $   pandocCompiler
-                      >>= loadAndApplyTemplate "templates/post.html"    postCtx
-                      >>= loadAndApplyTemplate "templates/default.html" postCtx
+                      >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
+                      >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
                       >>= relativizeUrls
 
               create ["archive.html"] $ do
@@ -59,6 +75,16 @@ main =
                           >>= loadAndApplyTemplate "templates/default.html"
                                                    archiveCtx
                           >>= relativizeUrls
+
+              create ["sitemap.xml"] $ do
+                  route idRoute
+                  compile $ do
+                      posts <- recentFirst =<< loadAll "posts/*"
+                      singlePages <- loadAll (fromList ["about.rst", "contact.markdown"])
+                      let pages      = posts <> singlePages
+                          sitemapCtx = constField "root" root <> listField "pages" postCtx (return pages)
+                      makeItem "" 
+                          >>= loadAndApplyTemplate "templates/sitemap.xml" sitemapCtx
 
 
               match "index.html" $ do
@@ -81,4 +107,13 @@ main =
 
 --------------------------------------------------------------------------------
 postCtx :: Context String
-postCtx = dateField "date" "%B %e, %Y" `mappend` defaultContext
+postCtx = 
+    constField "root" root 
+    <> dateField "date" "%B %e, %Y" 
+    <> defaultContext
+
+postCtxWithTags :: Tags -> Context String
+postCtxWithTags tags = tagsField "tags" tags `mappend` postCtx
+
+root :: String
+root = "https://dnlkrgr.com"

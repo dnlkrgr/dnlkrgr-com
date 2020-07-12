@@ -1,10 +1,15 @@
 <article>
     <section class="header">
+        <div>
         Posted on $date$
-        $if(author)$
-            by $author$
+        </div>
+        <div>
+        $if(tags)$
+        Tags: $tags$
         $endif$
+        </div>
     </section>
+
     <section>
         $body$
     </section>

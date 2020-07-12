@@ -12,7 +12,7 @@ let
         isLibrary = false;
         isExecutable = true;
         executableHaskellDepends = [ base hakyll ];
-        license = stdenv.lib.licenses.free;
+        license = "unknown";
         hydraPlatforms = stdenv.lib.platforms.none;
       };
 
