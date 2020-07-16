@@ -37,6 +37,6 @@ There are no plugins / frontend frameworks used which could store data about you
 # Impressum
 
 * Daniel Krüger
-* Schauinslandstr. 26, 71134 Aidlingen
-* 07034 / 31940
-* daniel.krueger.cs@gmail.com
+* Anschrift: Schauinslandstr. 26, 71134 Aidlingen
+* Telefon:   07034 / 31940
+* Email:     daniel.krueger.cs@gmail.com
