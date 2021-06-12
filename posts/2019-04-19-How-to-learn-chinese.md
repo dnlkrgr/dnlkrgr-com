@@ -3,8 +3,6 @@ title: How To Learn Chinese
 tags: chinese
 ---
 
-<img src="../images/great-wall.jpg" alt="great wall of china with foggy mountains in the back" />
-
 Learning Chinese has never been easier. It's still a long journey but it's not as hard as most people think.
 
 I like Chinese because for me, it is a little bit more on the consistent side than some other languages (French, German).

@@ -1,12 +1,12 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid                    ( mappend )
-import           Hakyll
 
+import Data.Monoid (mappend)
+import Hakyll
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyllWith (defaultConfiguration { deployCommand = "rsync -cave 'ssh' _site daniel@dnlkrgr.com:hakyll" }) $ do
+main = hakyllWith (defaultConfiguration{deployCommand = "rsync -cave 'ssh' _site daniel@dnlkrgr.com:hakyll"}) $ do
     match "images/*" $ do
         route idRoute
         compile copyFileCompiler
@@ -17,9 +17,10 @@ main = hakyllWith (defaultConfiguration { deployCommand = "rsync -cave 'ssh' _si
 
     match (fromList ["about.rst", "contact.markdown"]) $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
+        compile $
+            pandocCompiler
+                >>= loadAndApplyTemplate "templates/default.html" defaultContext
+                >>= relativizeUrls
 
         tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
@@ -29,11 +30,11 @@ main = hakyllWith (defaultConfiguration { deployCommand = "rsync -cave 'ssh' _si
             compile $ do
                 posts <- recentFirst =<< loadAll pattern
 
-                let 
-                    ctx =  constField "title" title 
-                        <> listField "posts" (postCtxWithTags tags) (return posts) 
-                        <> defaultContext
-              
+                let ctx =
+                        constField "title" title
+                            <> listField "posts" (postCtxWithTags tags) (return posts)
+                            <> defaultContext
+
                 makeItem ""
                     >>= loadAndApplyTemplate "templates/tag.html" ctx
                     >>= loadAndApplyTemplate "templates/default.html" ctx
@@ -41,20 +42,21 @@ main = hakyllWith (defaultConfiguration { deployCommand = "rsync -cave 'ssh' _si
 
         match "posts/*" $ do
             route $ setExtension "html"
-            compile $ pandocCompiler
-                >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
-                >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
-                >>= relativizeUrls
+            compile $
+                pandocCompiler
+                    >>= loadAndApplyTemplate "templates/post.html" (postCtxWithTags tags)
+                    >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
+                    >>= relativizeUrls
 
         create ["archive.html"] $ do
             route idRoute
             compile $ do
                 posts <- recentFirst =<< loadAll "posts/*"
 
-                let 
-                    archiveCtx =  listField "posts" postCtx (return posts) 
-                               <> constField "title" "Posts" 
-                               <> defaultContext
+                let archiveCtx =
+                        listField "posts" postCtx (return posts)
+                            <> constField "title" "Posts"
+                            <> defaultContext
 
                 makeItem ""
                     >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -67,23 +69,22 @@ main = hakyllWith (defaultConfiguration { deployCommand = "rsync -cave 'ssh' _si
                 posts <- recentFirst =<< loadAll "posts/*"
                 singlePages <- loadAll (fromList ["about.rst", "contact.markdown"])
 
-                let 
-                    pages      = posts <> singlePages
-                    sitemapCtx =  constField "root" root 
-                               <> listField "pages" postCtx (return pages)
+                let pages = posts <> singlePages
+                    sitemapCtx =
+                        constField "root" root
+                            <> listField "pages" postCtx (return pages)
 
                 makeItem "" >>= loadAndApplyTemplate "templates/sitemap.xml" sitemapCtx
-
 
         match "index.html" $ do
             route idRoute
             compile $ do
                 posts <- recentFirst =<< loadAll "posts/*"
 
-                let 
-                    indexCtx = listField "posts" postCtx (return posts) 
-                             <> constField "title" "Home" 
-                             <> defaultContext
+                let indexCtx =
+                        listField "posts" postCtx (return posts)
+                            <> constField "title" "Home"
+                            <> defaultContext
 
                 getResourceBody
                     >>= applyAsTemplate indexCtx
@@ -92,13 +93,12 @@ main = hakyllWith (defaultConfiguration { deployCommand = "rsync -cave 'ssh' _si
 
         match "templates/*" $ compile templateBodyCompiler
 
-
 --------------------------------------------------------------------------------
 postCtx :: Context String
-postCtx = 
-       constField "root" root 
-    <> dateField "date" "%B %e, %Y" 
-    <> defaultContext
+postCtx =
+    constField "root" root
+        <> dateField "date" "%B %e, %Y"
+        <> defaultContext
 
 postCtxWithTags :: Tags -> Context String
 postCtxWithTags tags = tagsField "tags" tags <> postCtx
